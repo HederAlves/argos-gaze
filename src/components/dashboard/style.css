@@ -1,0 +1,24 @@
+.chart-container {
+    position: relative;
+    margin-left: 100px;
+    width: 40%;
+    height: 60vh; /* Adjust height as needed */
+    min-height: 300px; /* Minimum height for small screens */
+    max-height: 800px; /* Maximum height for large screens */
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+        height: 50vh; 
+        width: 100%;
+        margin-left: 0px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chart-container {
+        height: 40vh; /* Adjust height for very small screens */
+        width: 100%;
+        margin-left: 0px;
+    }
+}
