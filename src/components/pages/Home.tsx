@@ -10,24 +10,36 @@ import CampaignList from '../campaign-list/CampaignList';
 const Container = styled.div`
     display: flex;
     background-color: #f1f1f1;
+    min-height: 100vh;
 `;
 
 const Navbar = styled.nav`
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
+    gap: 50px;
     align-items: center;
     background-color: #343a40;
-    padding: 10px 10px;
+    padding: 10px 20px;
     color: white;
     position: fixed;
-    width: 99%;
+    width: 100%;
     top: 0;
     z-index: 1000;
+
+    @media (max-width: 768px) {
+        justify-content: start;
+        gap: 50px;
+    }
 `;
 
 const NavbarNav = styled.ul`
     display: flex;
-    padding: 0px 20px;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: 768px) {
+        display: none;
+    }
 `;
 
 const NavItem = styled.li`
@@ -43,20 +55,45 @@ const NavItem = styled.li`
     }
 `;
 
-const Sidebar = styled.aside`
-    width: 200px;
+const HamburgerButton = styled.button`
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+
+    @media (max-width: 768px) {
+        display: block;
+    }
+`;
+
+const Sidebar = styled.aside<{ isOpen: boolean }>`
+    width: ${props => (props.isOpen ? '200px' : '150px')};
     background-color: #f8f9fa;
     height: 100vh;
     position: fixed;
+    z-index: 999;
     top: 60px;
     left: 0;
     padding-top: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease;
+
+    @media (max-width: 768px) {
+        width: ${props => (props.isOpen ? '200px' : '0')};
+        overflow: hidden;
+    }
 `;
 
 const SidebarNav = styled.ul`
     list-style: none;
     padding: 0;
+    text-align: center;
+
+    @media (max-width: 768px) {
+        text-align: left;
+    }
 `;
 
 const SidebarItem = styled.li`
@@ -64,6 +101,7 @@ const SidebarItem = styled.li`
     a {
         color: #343a40;
         text-decoration: none;
+        padding: 10px;
         font-size: 18px;
         display: block;
 
@@ -72,18 +110,48 @@ const SidebarItem = styled.li`
             border-radius: 4px;
         }
     }
+
+    @media (max-width: 768px) {
+        padding: 10px 10px;
+        a {
+            font-size: 14px;
+        }
+    }
 `;
 
-const MainContent = styled.main`
+const MainContent = styled.main<{ isSidebarOpen: boolean }>`
+    margin-left: ${props => (props.isSidebarOpen ? '220px' : '60px')};
     margin-top: 80px;
     margin-bottom: 10px;
     background-color: #ffffff;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    padding: 18px 10px 0px 20px;
+    width: calc(100% - ${props => (props.isSidebarOpen ? '220px' : '60px')});
+    transition: margin-left 0.3s ease, width 0.3s ease;
+
+    @media (max-width: 768px) {
+        margin-left: 0;
+        width: 100%;
+    }
+`;
+
+const ContentContainer = styled.div`
+    display: flex;
+    justify-content: space-around;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 `;
 
 const Home: React.FC = () => {
     const [campaigns, setCampaigns] = useState<AdCampaign[]>([]);
+    const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -122,7 +190,10 @@ const Home: React.FC = () => {
     return (
         <Container>
             <Navbar>
-                <img width={'10%'} src={nave_logo} alt="Descrição da Imagem" />
+                <HamburgerButton onClick={toggleSidebar}>
+                    &#9776;
+                </HamburgerButton>
+                <img width={'200px'} src={nave_logo} alt="Descrição da Imagem" />
                 <NavbarNav>
                     <NavItem>
                         <a href="#home">Home</a>
@@ -135,7 +206,7 @@ const Home: React.FC = () => {
                     </NavItem>
                 </NavbarNav>
             </Navbar>
-            <Sidebar>
+            <Sidebar isOpen={isSidebarOpen}>
                 <SidebarNav>
                     <SidebarItem>
                         <a href="#dashboard">Dashboard</a>
@@ -151,15 +222,13 @@ const Home: React.FC = () => {
                     </SidebarItem>
                 </SidebarNav>
             </Sidebar>
-            <div style={{ display: 'flex' }}>
-                <MainContent style={{ marginLeft: '220px', padding: '18px 10px 0px 20px', }}>
-                    <h1 style={{ paddingBottom: '10px', textAlign: 'center' }}>Resultado dos seus Anúncios</h1>
+            <MainContent isSidebarOpen={isSidebarOpen}>
+                <h1 style={{ paddingBottom: '10px', textAlign: 'center' }}>Resultado dos seus Anúncios</h1>
+                <ContentContainer>
                     <Dashboard campaigns={campaigns} />
-                </MainContent>
-                <MainContent style={{ marginLeft: '18px', marginRight: '10px' }}>
                     <CampaignList campaigns={campaigns} />
-                </MainContent>
-            </div>
+                </ContentContainer>
+            </MainContent>
         </Container>
     );
 };
