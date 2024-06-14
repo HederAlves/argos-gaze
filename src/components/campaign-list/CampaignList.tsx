@@ -9,15 +9,15 @@ interface AdCampaignListProps {
 const AdCampaignListContainer = styled.div`
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap; /* Adicione essa propriedade */
-    max-width: 1200px; /* Adicione essa propriedade */
-    margin: 15px;
+    max-height: 502px;
+    margin: '15px';
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: #ccc #f0f0f0; 
     gap: 20px;
-    padding: 20px; /* Adicione essa propriedade */
+    padding: 20px;
+    heigth: 50px
 `;
 
 const AdCampaignCard = styled.div`
@@ -25,12 +25,12 @@ const AdCampaignCard = styled.div`
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex-grow: 1; /* Adicione essa propriedade */
+    width: calc(33.333% - 40px);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 16px; /* Adicione essa propriedade */
+    width: 240px;
 
     h2 {
         margin-top: 0;

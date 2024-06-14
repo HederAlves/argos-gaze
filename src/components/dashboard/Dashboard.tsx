@@ -1,15 +1,20 @@
-// Dashboard.tsx
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { AdCampaign } from '../Ad-campaigns/AdCampaigns';
-import './style.css'
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface DashboardProps {
     campaigns: AdCampaign[];
 }
+
+
+// .chart - container.chartjs - legend {
+//     padding - top: 10px;  /* Adiciona padding no topo da legenda */
+//     padding - bottom: 10px;  /* Adiciona padding na base da legenda */
+// }
+
 
 const Dashboard: React.FC<DashboardProps> = ({ campaigns }) => {
     const campaignNames = campaigns.map(campaign => campaign.outdoors);
@@ -54,7 +59,6 @@ const Dashboard: React.FC<DashboardProps> = ({ campaigns }) => {
 
     const options = {
         responsive: true,
-        maintainAspectRatio: false,
         plugins: {
             title: {
                 display: true,
@@ -64,10 +68,10 @@ const Dashboard: React.FC<DashboardProps> = ({ campaigns }) => {
                 display: true,
                 position: 'top' as const,
                 labels: {
-                    boxWidth: 12,
-                    padding: 10,
+                    boxWidth: 12, // Adjust according to your need
+                    padding: 10, // Adjust padding around each legend item
                     font: {
-                        size: 12,
+                        size: 12, // Adjust font size as needed
                     },
                 },
             },
@@ -75,7 +79,7 @@ const Dashboard: React.FC<DashboardProps> = ({ campaigns }) => {
     };
 
     return (
-        <div className="chart-container">
+        <div className="chart-container" style={{ width: '780px' }}>
             <Bar data={data} options={options} />
         </div>
     );
